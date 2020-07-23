@@ -50,7 +50,7 @@ Returns only the Date, Subject.
 ```
 
 ### Accounts
-Simeple.
+Simple.
 ```
 --action accounts --output json
 ```
