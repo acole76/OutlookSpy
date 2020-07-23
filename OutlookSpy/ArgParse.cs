@@ -246,6 +246,50 @@ namespace ArgumentParser
       return null;
     }
 
+    public T Get<T>(string key, int defaultValue)
+    {
+      T ret = Get<T>(key);
+      if (ret == null)
+      {
+        return (T)Convert.ChangeType(defaultValue, typeof(T));
+      }
+
+      return ret;
+    }
+
+    public T Get<T>(string key, DateTime defaultValue)
+    {
+      T ret = Get<T>(key);
+      if (ret == null)
+      {
+        return (T)Convert.ChangeType(defaultValue, typeof(T));
+      }
+
+      return ret;
+    }
+
+    public T Get<T>(string key, long defaultValue)
+    {
+      T ret = Get<T>(key);
+      if (ret == null)
+      {
+        return (T)Convert.ChangeType(defaultValue, typeof(T));
+      }
+
+      return ret;
+    }
+
+    public T Get<T>(string key, string defaultValue)
+    {
+      T ret = Get<T>(key);
+      if (ret == null)
+      {
+        return (T)Convert.ChangeType(defaultValue, typeof(T));
+      }
+
+      return ret;
+    }
+
     public T Get<T>(string key)
     {
       if (!argumentDict.ContainsKey(key))
