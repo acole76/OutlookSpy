@@ -21,6 +21,8 @@ namespace OutlookSpy
 			accountDt.Columns.Add("SmtpAddress", Type.GetType("System.String"));
 			accountDt.Columns.Add("UserName", Type.GetType("System.String"));
 			accountDt.Columns.Add("DisplayName", Type.GetType("System.String"));
+			accountDt.Columns.Add("ExchangeMailboxServerName", Type.GetType("System.String"));
+			accountDt.Columns.Add("ExchangeMailboxServerVersion", Type.GetType("System.String"));
 			app.OutlookDataSet.Tables.Add(accountDt);
 		}
 
@@ -28,7 +30,7 @@ namespace OutlookSpy
 		{
 			foreach (Outlook.Account account in outlookAccounts)
 			{
-				app.OutlookDataSet.Tables["accounts"].Rows.Add(new object[] { account.SmtpAddress, account.UserName, account.DisplayName });
+				app.OutlookDataSet.Tables["accounts"].Rows.Add(new object[] { account.SmtpAddress, account.UserName, account.DisplayName, account.ExchangeMailboxServerName, account.ExchangeMailboxServerVersion });
 			}
 		}
 	}
