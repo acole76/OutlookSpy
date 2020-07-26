@@ -54,9 +54,20 @@ namespace OutlookSpy
 
 		public void ProcessFolder(Outlook.MAPIFolder folder)
 		{
-			DataTable messagesDt =  app.OutlookDataSet.Tables["messages"];
-			foreach (Outlook.MailItem message in folder.Items)
+			DataTable messagesDt = app.OutlookDataSet.Tables["messages"];
+			foreach (object obj in folder.Items)
 			{
+				if ((obj as Outlook.MailItem) == null)
+				{
+					continue;
+				}
+				Outlook.MailItem message = obj as Outlook.MailItem;
+
+				if (message == null)
+				{
+					continue;
+				}
+
 				if (messagesDt.Rows.Count > app.MaxRecords)
 				{
 					break;
@@ -71,32 +82,46 @@ namespace OutlookSpy
 				}
 				else
 				{
-					if (app.SubjectContains != null && app.SubjectContains.Length > 0 && !message.Subject.ToLower().Contains(app.SubjectContains.ToLower()))
+					if (message.Subject != null)
+					{
+						if (app.SubjectContains != null && app.SubjectContains.Length > 0 && !message.Subject.ToLower().Contains(app.SubjectContains.ToLower()))
+						{
+							addMessage = false;
+						}
+
+						if (app.SubjectContainsRegex != null && app.SubjectContainsRegex.Length > 0)
+						{
+							Match m = Regex.Match(message.Subject, app.SubjectContainsRegex);
+							if (!m.Success)
+							{
+								addMessage = false;
+							}
+						}
+					}
+					else
 					{
 						addMessage = false;
 					}
 
-					if (app.SubjectContainsRegex != null && app.SubjectContainsRegex.Length > 0)
+					if (message.Body != null)
 					{
-						Match m = Regex.Match(message.Subject, app.SubjectContainsRegex);
-						if (!m.Success)
+						if (app.BodyContains != null && app.BodyContains.Length > 0 && !message.Body.ToLower().Contains(app.BodyContains.ToLower()))
 						{
 							addMessage = false;
 						}
-					}
 
-					if (app.BodyContains != null && app.BodyContains.Length > 0 && !message.Body.ToLower().Contains(app.BodyContains.ToLower()))
+						if (app.BodyContainsRegex != null && app.BodyContainsRegex.Length > 0)
+						{
+							Match m = Regex.Match(message.Body, app.BodyContainsRegex);
+							if (!m.Success)
+							{
+								addMessage = false;
+							}
+						}
+					}
+					else
 					{
 						addMessage = false;
-					}
-
-					if (app.BodyContainsRegex != null && app.BodyContainsRegex.Length > 0)
-					{
-						Match m = Regex.Match(message.Body, app.BodyContainsRegex);
-						if (!m.Success)
-						{
-							addMessage = false;
-						}
 					}
 				}
 
